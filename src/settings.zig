@@ -14,4 +14,5 @@ pub const color_4 = rl.Color.init(242, 67, 51, 255);
 pub const color_5 = rl.Color.init(186, 27, 29, 255);
 
 pub const LEFT_WALL = 10;
-pub const RIGHT_WALL = window.width - LEFT_WALL;
+pub const RIGHT_WALL = window.width - LEFT_WALL - 10;
+pub const TOP_WALL = 60;

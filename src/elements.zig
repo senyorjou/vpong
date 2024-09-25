@@ -9,6 +9,10 @@ pub fn drawHeader(font: rl.Font) void {
     rl.drawTextEx(font, "Moar VPONG", position, font_size, spacing, settings.color_4);
 }
 
+pub fn drawArena() void {
+    rl.drawRectangleLines(10, 60, 780, 530, rl.Color.yellow);
+}
+
 const HORIZONTAL_MOV = 10;
 const TAIL_LEN = 10;
 
@@ -81,20 +85,6 @@ pub const Pad = struct {
             }
         }
     }
-
-    // pub fn left(self: *Pad, accel: bool) void {
-    //     const mov: f32 = if (accel) HORIZONTAL_MOV * 2 else HORIZONTAL_MOV;
-    //     if (self.pos.x > settings.LEFT_WALL) {
-    //         self.pos.x -= mov;
-    //     }
-    // }
-    //
-    // pub fn right(self: *Pad, accel: bool) void {
-    //     const mov: f32 = if (accel) HORIZONTAL_MOV * 2 else HORIZONTAL_MOV;
-    //     if (self.pos.x < settings.window.width - self.size.x - HORIZONTAL_MOV) {
-    //         self.pos.x += mov;
-    //     }
-    // }
 
     pub fn draw(self: *Pad) void {
         // first draw the tail in reverse, only tail-length -2
