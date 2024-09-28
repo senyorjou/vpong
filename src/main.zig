@@ -16,6 +16,8 @@ fn randomInRange(comptime T: type, min: T, max: T) T {
 pub fn main() anyerror!void {
     // Initialization
     //--------------------------------------------------------------------------------------
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    const allocator = gpa.allocator();
 
     rl.initWindow(settings.window.width, settings.window.height, "Vprong");
     defer rl.closeWindow(); // Close window and OpenGL context
@@ -25,22 +27,22 @@ pub fn main() anyerror!void {
     defer rl.unloadFont(font);
 
     // elements
-    var pad = els.Pad.init((settings.window.width / 2) - (60 / 2), settings.window.height - 40, 60, 20);
+    var pad = pad_module.Pad.init((settings.window.width / 2) - (60 / 2), settings.window.height - 40, 60, 20, allocator);
     var hole = hole_module.Hole{};
     var accel = els.Accel{};
+    // var weapon = pad_module.Weapon{};
+    // var weapon = pad_module.Weapon.init(allocator);
+    // defer weapon.deinit();
 
     // balls
-
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
 
     // candies
     var candies = std.ArrayList(hole_module.Candy).init(allocator);
     defer candies.deinit();
 
     // bullets
-    var shots = std.ArrayList(pad_module.Shot).init(allocator);
-    defer shots.deinit();
+    // var shots = std.ArrayList(pad_module.Shot).init(allocator);
+    // defer shots.deinit();
 
     //
     rl.setTargetFPS(60);
@@ -63,16 +65,13 @@ pub fn main() anyerror!void {
         rl.clearBackground(settings.color_3);
 
         // update everything
-        pad.update(accel.is_active);
+        try pad.update(accel.is_active);
         hole.update();
         accel.update();
+        // try weapon.update();
 
         for (candies.items) |*candy| {
             candy.update();
-        }
-
-        for (shots.items) |*shot| {
-            shot.update();
         }
 
         // draw
