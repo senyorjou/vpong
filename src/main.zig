@@ -6,6 +6,7 @@ const els = @import("elements.zig");
 const hole_module = @import("hole.zig");
 const pad_module = @import("pad.zig");
 const rnd = @import("randoms.zig");
+const phys = @import("physics.zig");
 
 fn randomInRange(comptime T: type, min: T, max: T) T {
     const random = std.crypto.random.int(T);
@@ -28,21 +29,12 @@ pub fn main() anyerror!void {
 
     // elements
     var pad = pad_module.Pad.init((settings.window.width / 2) - (60 / 2), settings.window.height - 40, 60, 20, allocator);
-    var hole = hole_module.Hole{};
+    defer pad.deinit();
+
+    var hole = hole_module.Hole.init(allocator);
+    defer hole.deinit();
+
     var accel = els.Accel{};
-    // var weapon = pad_module.Weapon{};
-    // var weapon = pad_module.Weapon.init(allocator);
-    // defer weapon.deinit();
-
-    // balls
-
-    // candies
-    var candies = std.ArrayList(hole_module.Candy).init(allocator);
-    defer candies.deinit();
-
-    // bullets
-    // var shots = std.ArrayList(pad_module.Shot).init(allocator);
-    // defer shots.deinit();
 
     //
     rl.setTargetFPS(60);
@@ -51,12 +43,6 @@ pub fn main() anyerror!void {
     // Main game loop
     while (!rl.windowShouldClose()) { // Detect window close button or ESC key
         // Update conditions
-        // Should I drop a candy?
-        // if rnd (0,100) == 13 yessss
-        //
-        if (rnd.randomBetween(u8, 0, 100) == 13) {
-            try candies.append(hole_module.Candy.init(hole));
-        }
 
         // Draw
         rl.beginDrawing();
@@ -66,11 +52,10 @@ pub fn main() anyerror!void {
 
         // update everything
         try pad.update(accel.is_active);
-        hole.update();
+        try hole.update();
         accel.update();
-        // try weapon.update();
 
-        for (candies.items) |*candy| {
+        for (hole.candies.items) |*candy| {
             candy.update();
         }
 
@@ -81,8 +66,13 @@ pub fn main() anyerror!void {
         hole.draw();
         accel.draw();
 
-        for (candies.items) |*candy| {
+        for (hole.candies.items) |*candy| {
             candy.draw();
         }
+
+        // check collisions
+        // check if bullets have impacted
+        phys.checkShootigs(hole, pad);
+        phys.checkCrash(hole, &pad);
     }
 }

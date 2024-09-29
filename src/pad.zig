@@ -11,7 +11,8 @@ pub const Pad = struct {
     color: rl.Color = rl.Color.white,
     positions: [TAIL_LEN]rl.Vector2,
     pos_index: usize = 0,
-    shots: std.ArrayList(Shot) = undefined,
+    shots: std.ArrayList(Shot),
+    is_hit: bool = false,
 
     pub fn init(x: f32, y: f32, w: f32, h: f32, allocator: std.mem.Allocator) Pad {
         const initial_pos = rl.Vector2.init(x, y);
@@ -22,6 +23,11 @@ pub const Pad = struct {
 
     pub fn deinit(self: Pad) void {
         self.shots.deinit();
+    }
+
+    pub fn hit(self: *Pad) void {
+        self.is_hit = true;
+        self.color = rl.Color.red;
     }
 
     fn update_position_history(self: *Pad) void {
@@ -50,6 +56,7 @@ pub const Pad = struct {
             try self.shots.append(Shot.init(self.pos));
         }
 
+        // Update shots
         for (0.., self.shots.items) |index, *shot| {
             if (shot.pos.y < settings.TOP_WALL) {
                 _ = self.shots.swapRemove(index);
