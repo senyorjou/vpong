@@ -20,11 +20,11 @@ jobs:
         uses: mlugg/setup-zig@v1
         with:
           version: master
-          cache: true # Let's see how this behaves
+          use-cache: true # Let's see how this behaves
 
       - run: zig version
 
       - run: zig env
 
       - name: Build
-        run: zig build --verbose
+        run: zig build
