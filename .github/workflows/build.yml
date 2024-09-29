@@ -13,6 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     name: Test and Build
     steps:
+      - name: Install OpenGL deps
+        run: sudo apt install \
+          libasound2-dev \
+          libx11-dev \
+          libxrandr-dev \
+          libxi-dev \
+          libgl1-mesa-dev \
+          libglu1-mesa-dev \
+          libxcursor-dev \
+          libxinerama-dev \
+          libwayland-dev \
+          libxkbcommon-dev
+
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -21,10 +34,6 @@ jobs:
         with:
           version: master
           use-cache: true # Let's see how this behaves
-
-      - run: zig version
-
-      - run: zig env
 
       - name: Build
         run: zig build
