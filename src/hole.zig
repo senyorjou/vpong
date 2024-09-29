@@ -11,8 +11,8 @@ const Point = struct {
 };
 
 fn randomDir() Point {
-    const x = rnd.randomBetween(i32, -5, 5);
-    const y = rnd.randomBetween(i32, 1, 10);
+    const x = rnd.randomBetween(i32, -8, 8);
+    const y = rnd.randomBetween(i32, 3, 14);
 
     return Point{ .x = x, .y = y };
 }
@@ -25,6 +25,9 @@ pub const Hole = struct {
     direction: i32,
     size: f32,
     candies: std.ArrayList(Candy),
+    is_hit: bool = false,
+    lives: u8 = 3,
+    is_dead: bool = false,
 
     pub fn init(allocator: std.mem.Allocator) Hole {
         return .{ .center_x = 400, .center_y = 100, .radius = 30, .color = rl.Color.blue, .direction = 1, .size = 1.0, .candies = std.ArrayList(Candy).init(allocator) };
@@ -32,6 +35,12 @@ pub const Hole = struct {
 
     pub fn deinit(self: Hole) void {
         self.candies.deinit();
+    }
+
+    pub fn hit(self: *Hole) void {
+        self.is_hit = true;
+        self.lives -= 1;
+        self.is_dead = self.lives == 0;
     }
 
     pub fn update(self: *Hole) !void {

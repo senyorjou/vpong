@@ -50,29 +50,42 @@ pub fn main() anyerror!void {
 
         rl.clearBackground(settings.color_3);
 
-        // update everything
-        try pad.update(accel.is_active);
-        try hole.update();
-        accel.update();
+        if (pad.is_hit or hole.is_hit) {
+            els.drawHeader(font);
+            els.drawArena();
+            hole.draw();
+            accel.draw();
+            pad.draw();
 
-        for (hole.candies.items) |*candy| {
-            candy.update();
+            for (hole.candies.items) |*candy| {
+                candy.draw();
+            }
+        } else {
+            // update everything
+            try pad.update(accel.is_active);
+            try hole.update();
+            accel.update();
+
+            for (hole.candies.items) |*candy| {
+                candy.update();
+            }
+
+            // draw
+            els.drawHeader(font);
+            els.drawArena();
+            pad.draw();
+            hole.draw();
+            accel.draw();
+
+            for (hole.candies.items) |*candy| {
+                candy.draw();
+            }
+
+            // check collisions
+            // check if bullets have impacted
+            phys.checkCandyShootigs(hole, pad);
+            phys.checkHoleShootigs(&hole, pad);
+            phys.checkCrash(hole, &pad);
         }
-
-        // draw
-        els.drawHeader(font);
-        els.drawArena();
-        pad.draw();
-        hole.draw();
-        accel.draw();
-
-        for (hole.candies.items) |*candy| {
-            candy.draw();
-        }
-
-        // check collisions
-        // check if bullets have impacted
-        phys.checkShootigs(hole, pad);
-        phys.checkCrash(hole, &pad);
     }
 }

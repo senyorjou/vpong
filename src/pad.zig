@@ -58,7 +58,7 @@ pub const Pad = struct {
 
         // Update shots
         for (0.., self.shots.items) |index, *shot| {
-            if (shot.pos.y < settings.TOP_WALL) {
+            if (shot.pos.y < settings.TOP_WALL or shot.is_hit) {
                 _ = self.shots.swapRemove(index);
             } else {
                 shot.update();
@@ -92,12 +92,17 @@ pub const Pad = struct {
 
 pub const Shot = struct {
     pos: rl.Vector2,
+    is_hit: bool = false,
 
     pub fn init(pos: rl.Vector2) Shot {
         const x = pos.x + 27.0;
         const y = pos.y - 20.0;
 
         return .{ .pos = rl.Vector2.init(x, y) };
+    }
+
+    pub fn hit(self: *Shot) void {
+        self.is_hit = true;
     }
 
     pub fn draw(self: *Shot) void {
