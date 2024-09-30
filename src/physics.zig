@@ -49,19 +49,3 @@ pub fn checkCrash(hole: hole_module.Hole, pad: *pad_module.Pad) void {
         }
     }
 }
-
-// Check collision between circle and rectangle
-pub fn checkCollisionCircleRec(center: rl.Vector2, radius: f32, rec: rl.Rectangle) bool {
-    _ = center; // autofix
-    _ = radius; // autofix
-    _ = rec; // autofix
-    // return cdef.CheckCollisionCircleRec(center, radius, rec);
-    return false;
-}
-//
-//
-// pub const Rectangle = extern struct {
-//     x: f32,
-//     y: f32,
-//     width: f32,
-//     height: f32,

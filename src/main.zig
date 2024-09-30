@@ -8,12 +8,6 @@ const pad_module = @import("pad.zig");
 const rnd = @import("randoms.zig");
 const phys = @import("physics.zig");
 
-fn randomInRange(comptime T: type, min: T, max: T) T {
-    const random = std.crypto.random.int(T);
-    const range = max - min + 1;
-    return @rem(random + range, range) + min;
-}
-
 pub fn main() anyerror!void {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -50,7 +44,7 @@ pub fn main() anyerror!void {
 
         rl.clearBackground(settings.color_3);
 
-        if (pad.is_hit or hole.is_hit) {
+        if (pad.is_hit or hole.is_dead) {
             els.drawHeader(font);
             els.drawArena();
             hole.draw();
