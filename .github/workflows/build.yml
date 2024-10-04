@@ -44,4 +44,4 @@ jobs:
           mkdir dist-linux
           cp ./zig-out/bin/vpong dist-linux
           cp -r ./resources dist-linux
-          tar cvzf dist-linux.tgz
+          tar cvzf dist-linux.tgz dist-linux
