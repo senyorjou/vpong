@@ -38,4 +38,6 @@ jobs:
           use-cache: true # Let's see how this behaves
 
       - name: Build
-        run: zig build
+        run: |
+          zig build
+          las -lah ./zig-out/bin
