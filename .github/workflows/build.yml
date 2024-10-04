@@ -40,4 +40,8 @@ jobs:
       - name: Build
         run: |
           zig build
-          las -lah ./zig-out/bin
+          ls -lah ./zig-out/bin
+          mkdir dist
+          cp ./zig-out/bin/vpong dist-linux
+          cp -r ./resources dist-linux
+          tar cvzf dist-linux.tgz
