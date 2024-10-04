@@ -41,7 +41,7 @@ jobs:
         run: |
           zig build
           ls -lah ./zig-out/bin
-          mkdir dist
+          mkdir dist-linux
           cp ./zig-out/bin/vpong dist-linux
           cp -r ./resources dist-linux
           tar cvzf dist-linux.tgz
